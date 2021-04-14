@@ -1,0 +1,56 @@
+{% extends 'purchase/master.html' %}
+{% load static %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box-element">
+                <a class="btn btn-outline-dark" href="{% url 'purchase:item_details' %}">&#x2190; Continue Shopping</a>
+
+                <br>
+                <br>
+
+                <table class="table">
+                    <tr>
+                        <th><h5>Items: <strong>{{ order.get_cart_items }}</strong></h5></th>
+                        <th><h5>Total: <strong>Rs.{{ order.get_cart_total }}</strong></h5></th>
+                        <th>
+                            <a style="float: right; margin:5px" class="btn btn-success" href="{% url 'purchase:checkout' %}">Checkout</a>
+                        </th>
+                    </tr>
+                </table>
+
+            </div>
+
+            <br>
+
+            <div class="box-element">
+                <div class="cart-row">
+                    <div style="flex:2"></div>
+                    <div style="flex:2"><strong>Item</strong></div>
+                    <div style="flex:1"><strong>Price</strong></div>
+                    <div style="flex:1"><strong>Quantity</strong></div>
+                    <div style="flex:1"><strong>Discount</strong></div>
+                    <div style="flex:1"><strong>Total</strong></div>
+                </div>
+
+                {% for s_item in items_selected %}
+                    <div class="cart-row">
+<!--                        <div style="flex:2"><img class="row-image" src="{% static 'images/placeholder.jfif' %}"></div>-->
+                        <div style="flex:2"><h4><strong>{{ s_item.item.item_name }}</strong></h4></div>
+                        <div style="flex:2">{{ s_item.item.item_name }}</div>
+                        <div style="flex:1">Rs.{{ s_item.item.item_price }}</div>
+                        <div style="flex:1" class="row">
+                            <a data-item={{s_item.item.id}} data-action="remove" class="update-cart" style="text-decoration:none" href=""><strong>- &nbsp;</strong></a>
+                            <p class="quantity">{{ s_item.quantity }}</p>
+                            <a data-item={{s_item.item.id}} data-action="add" class="update-cart" style="text-decoration:none" href=""><strong>+</strong></a>
+                        </div>
+                        <div style="flex:1">Rs.{{ s_item.get_item_discount }}</div>
+                        <div style="flex:1">Rs.{{ s_item.get_item_total }}</div>
+
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}

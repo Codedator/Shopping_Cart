@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopper Stop</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="{%  static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+    <!-- User and CSRF Token -->
+    <script type="text/javascript">
+        var user = "{{ request.user }}"
+
+        function getToken(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getToken('csrftoken');
+
+    function getCookie(name){
+        //Split cookie string and get all name:value pairs is an array
+        var cookieArray = document.cookie.split(";");
+
+        for(var i=0; i < cookieArray.length; i++){
+            var cookiePair = cookieArray[i].split("=");
+
+            if(name == cookiePair[0].trim()){
+                return decodeURIComponent(cookiePair[1]);
+            }
+        }
+
+        return null;
+
+    }
+
+    var cart = JSON.parse(getCookie('cart'))
+
+    if(cart == undefined){
+        cart = {}
+        console.log('Cart was created')
+        document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+    }
+
+    console.log('Cart:', cart)
+
+    </script>
+
+
+
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="{% url 'purchase:item_details' %}">CuraTech</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'purchase:item_details' %}">Purchase
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="form-inline my-2 my-lg-0">
+                <a href="#" class="btn btn-warning">Login</a>
+                <a href="{% url 'purchase:shopping_cart' %}">
+                    <img id="shopping-cart-icon" src="{% static 'images/shopping_cart.png' %}">
+                </a>
+                <p id="cart-total">{{ cart_items }}</p>
+            </div>
+
+        </div>
+    </nav>
+    <hr>
+
+    <div class="container">
+        {% block content %}
+
+        {% endblock content %}
+    </div>
+
+
+    <!-- Java Script -->
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+
+</body>
+</html>
